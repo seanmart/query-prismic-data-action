@@ -9418,7 +9418,7 @@ function getDataFields(data,fields){
 
   let obj = {}
   fields.forEach(f => {
-    obj[f.key] = has(f.value,".") ? getNestedValue(f.value) : d[f.value]
+    obj[f.key] = has(f.value,".") ? getNestedValue(f.value) : data[f.value]
   })
 
   return obj
