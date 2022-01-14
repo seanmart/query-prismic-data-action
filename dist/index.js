@@ -9417,7 +9417,7 @@ function getValueFromPath(path,data){
   if (!has(path,".")) return data[path] || null
 
   return path.split('.').reduce((obj,key) => {
-    console.log(obj)
+    console.log(obj,key)
     if(!obj) return null
     return obj[key]
   },data)
