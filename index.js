@@ -33,10 +33,11 @@ function buildDataObjectFromFields(data,fields){
 
 function getValueFromPath(path,data){
   if (!has(path,".")) return data[path] || null
+
   return path.split('.').reduce((obj,key) => {
-    if(!obj) return null
-    obj  = obj[key] || null
     console.log(obj)
+    if(!obj) return null
+    obj = obj[key] || null
     return obj
   },data)
 }
