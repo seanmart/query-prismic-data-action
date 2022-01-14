@@ -9416,7 +9416,7 @@ function buildDataObjectFromFields(data,fields){
 }
 
 function getValueFromPath(path,data){
-  if (!has(field.path,".")) return data[path] || null
+  if (!has(path,".")) return data[path] || null
   return path.split('.').reduce((obj,key) => obj ? obj[key] : null,data)
 }
 
