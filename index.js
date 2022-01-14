@@ -33,8 +33,6 @@ function buildDataObjectFromFields(data,fields){
 function getValueFromPath(path,data){
   if (!has(path,".")) return data[path] || null
 
-  console.log('data',data)
-
   return path.split('.').reduce((obj,key) => {
     console.log(obj)
     if(!obj) return null
