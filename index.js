@@ -49,7 +49,7 @@ function getFields(d){
     return {key:a[0],field:a[1]}
   }
 
-  let fields = has(d,",") ? split(d,",") : [d]
+  let fields = has(d,",") ? d.split(",") : [d]
 
   return fields.map(f => {
     let key = null
