@@ -2,79 +2,64 @@ import * as prismic from "@prismicio/client"
 import {getInput,setOutput} from "@actions/core"
 import fetch from "node-fetch";
 
+let has = (s,c)=> s.indexOf(c) >= 0
+
 async function queryPrismicAPI(){
 
   let accessToken = getInput('ACCESS_TOKEN')
   let endPoint = getInput('END_POINT')
   let type = getInput('TYPE')
-  let client = getClient(endPoint,accessToken)
-  let fields = getFields(getInput('FIELDS'))
-  let res = null
-  let arr = []
-  let data = []
+  let client = getPrismicClient(endPoint,accessToken)
+  let fields = getFieldsKeyAndPath(getInput('FIELDS'))
+  let data = null
 
-  if(type) res = await client.getAllByType(type)
-
-  if (res){
-    arr = Array.isArray(res) ? res : [res]
-    arr.forEach(a => data.push(fields ? getDataFields(a,fields) : a))
+  if(type){
+    let res = await client.getAllByType(type)
+    data = res ? buildDataObjectFromFields(res,fields) : []
   }
 
-  let output = data.length == 1 ? data[0] : data
-  console.log('output',output)
-  setOutput('DATA', JSON.stringify(output));
+  console.log('output',data)
+  setOutput('DATA', JSON.stringify(data));
 
 }
 
-function has(s,c){
-  return s.indexOf(c) >= 0
+function buildDataObjectFromFields(data,fields){
+  return fields.reduce((obj,field) => {
+    let value = has(field.path,".") ? getValueFromPath(field.path,data) : data[field.path]
+    if (value) obj[field.key] = value
+    return obj
+  },{})
 }
 
-function getDataFields(data,fields){
-  // fields will be an array of {key,value}
-  let getNestedValue = (v) => v.split('.').reduce((o,i)=> o[i],data)
-
-  let obj = {}
-  fields.forEach(f => {
-    obj[f.key] = has(f.value,".") ? getNestedValue(f.value) : data[f.value]
-  })
-
-  return obj
+function getValueFromPath(path,data){
+  return path.split('.').reduce((obj,key) => obj ? obj[key] : null,data)
 }
 
-function getFields(d){
-  if(!d) return null
-  // example "id:uid,name:data.name"
 
-  let getFieldAndKey = (s)=>{
-    let a = s.split(':')
-    return {key:a[0],field:a[1]}
-  }
+function getFieldsKeyAndPath(fields){
 
-  let fields = has(d,",") ? d.split(",") : [d]
+  if (!fields) return []
 
-  return fields.map(f => {
-    let key = null
-    let value = f
+  let fieldsArr = has(fields,",") ? fields.split(",") : [fields]
 
-    if(has(f,":")){
-      let a = f.split(':')
-      key = a[0]
-      value = a[1]
-    } else if(has(f,".")) {
-      let a = f.split(".")
-      key = a[a.length - 1]
-    } else {
-      key = f
+  return fieldsArr.map(field => {
+
+    if(has(field,":")){
+      let parts = field.split(':')
+      return {key: parts[0], path: parts[1]}
     }
 
-    return {key,value}
+    if (has(field,".")){
+      let parts = f.split(".")
+      return {key:parts[parts.length - 1],path: field }
+    }
+
+    return {key: field,path: field}
 
   })
-
 }
 
-function getClient(endPoint,accessToken){
+function getPrismicClient(endPoint,accessToken){
   return prismic.createClient(endPoint,{
     accessToken,
     fetch: async (url,options)=>{
