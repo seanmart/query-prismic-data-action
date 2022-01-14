@@ -9401,8 +9401,7 @@ async function queryPrismicAPI(){
     data = res ? buildDataObjectFromFields(res,fields) : {}
   }
 
-  console.log('output',data)
-  ;(0,core.setOutput)('DATA', JSON.stringify(data));
+  (0,core.setOutput)('DATA', JSON.stringify(data));
 
 }
 
@@ -9416,6 +9415,8 @@ function buildDataObjectFromFields(data,fields){
 
 function getValueFromPath(path,data){
   if (!has(path,".")) return data[path] || null
+
+  console.log('data',data)
 
   return path.split('.').reduce((obj,key) => {
     console.log(obj)
