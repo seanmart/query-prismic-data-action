@@ -1,20 +1,24 @@
 name: query-prismic-api
+runs:
+  using: 'node16'
+  main: dist/index.js
 inputs:
   ACCESS_TOKEN:
     description: should be a Prismic Access Token
     required: true
+
   END_POINT:
     description: endpoint for Prismic
     required: true
+
   TYPE:
     description: queries all of a type
     requred: true
+
   FIELDS:
     description: if blank will return object, fields should be as follow: 'key1:obj.place.1,key2:obj.place.2'
     required: false
+
 outputs:
   DATA:
     description: outputs either an array or an object depending on inputs
-runs:
-  using: 'node16'
-  main: dist/index.js
