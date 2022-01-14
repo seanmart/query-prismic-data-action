@@ -9398,7 +9398,6 @@ async function queryPrismicAPI(){
 
   if(type){
     let res = await client.getAllByType(type)
-    console.log(res)
     data = res ? buildDataObjectFromFields(res,fields) : {}
   }
 
@@ -9410,6 +9409,7 @@ async function queryPrismicAPI(){
 function buildDataObjectFromFields(data,fields){
   return fields.reduce((obj,field) => {
     let value = getValueFromPath(field.path,data)
+    console.log(value)
     if (value) obj[field.key] = value
     return obj
   },{})
