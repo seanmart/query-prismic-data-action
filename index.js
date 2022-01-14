@@ -26,7 +26,6 @@ async function queryPrismicAPI(){
 function buildDataObjectFromFields(data,fields){
   return fields.reduce((obj,field) => {
     let value = getValueFromPath(field.path,data)
-    console.log(value)
     if (value) obj[field.key] = value
     return obj
   },{})
@@ -34,7 +33,12 @@ function buildDataObjectFromFields(data,fields){
 
 function getValueFromPath(path,data){
   if (!has(path,".")) return data[path] || null
-  return path.split('.').reduce((obj,key) => obj ? obj[key] : null,data)
+  return path.split('.').reduce((obj,key) => {
+    if(!obj) return null
+    obj  = obj[key] || null
+    console.log(obj)
+    return obj
+  },data)
 }
 
 
