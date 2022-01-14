@@ -9405,7 +9405,7 @@ async function queryPrismicAPI(){
 
   let output = data.length == 1 ? data[0] : data
   console.log('output',output)
-  ;(0,core.setOutput)('DATA', output);
+  ;(0,core.setOutput)('DATA', JSON.stringify(output));
 
 }
 
