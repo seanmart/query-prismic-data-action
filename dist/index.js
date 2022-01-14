@@ -9419,8 +9419,7 @@ function getValueFromPath(path,data){
   return path.split('.').reduce((obj,key) => {
     console.log(obj)
     if(!obj) return null
-    obj = obj[key] || null
-    return obj
+    return obj[key]
   },data)
 }
 
