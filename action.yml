@@ -8,9 +8,10 @@ inputs:
     required: true
   TYPE:
     description: queries all of a type
-    requred: false
+    requred: true
   FIELDS:
     description: if blank will return object, fields should be as follow: 'key1:obj.place.1,key2:obj.place.2'
+    required: false
 outputs:
   DATA:
     description: outputs either an array or an object depending on inputs
