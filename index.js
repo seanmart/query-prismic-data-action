@@ -21,6 +21,7 @@ async function queryPrismicAPI(){
   }
 
   let output = data.length == 1 ? data[0] : data
+  console.log('output',output)
   setOutput('DATA', output);
 
 }
