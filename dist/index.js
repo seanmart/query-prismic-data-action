@@ -9398,29 +9398,26 @@ async function queryPrismicAPI(){
 
   if(type){
     let res = await client.getAllByType(type)
-    data = res ? buildDataObjectFromFields(res,fields) : {}
+    data = res ? buildArrayFromFields(res,fields) : {}
   }
 
   (0,core.setOutput)('DATA', JSON.stringify(data));
 
 }
 
-function buildDataObjectFromFields(data,fields){
-  return fields.reduce((obj,field) => {
-    let value = getValueFromPath(field.path,data)
-    if (value) obj[field.key] = value
-    return obj
-  },{})
+function buildArrayFromFields(data,fields){
+  return data.map(dataItem => {
+    return fields.reduce((obj2,field) => {
+      let value = getValueFromPath(field.path,dataItem)
+      if (value) obj[field.key] = value
+      return obj
+    },{})
+  })
 }
 
 function getValueFromPath(path,data){
   if (!has(path,".")) return data[path] || null
-
-  return path.split('.').reduce((obj,key) => {
-    console.log(obj,key)
-    if(!obj) return null
-    return obj[key]
-  },data)
+  return path.split('.').reduce((obj,key) => obj ? obj[key] : null,data)
 }
 
 
