@@ -22,6 +22,9 @@ async function queryPrismicAPI(){
 
 function buildArrayFromFields(data,fields){
   return data.map(dataItem => {
+
+    if (fields.length == 0) return dataItem
+
     return fields.reduce((obj,field) => {
       let value = getValueFromPath(field.path,dataItem)
       if (value) obj[field.key] = value

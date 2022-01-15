@@ -21,4 +21,4 @@ inputs:
 
 outputs:
   DATA:
-    description: outputs a stringifyed json array/object
+    description: outputs a stringifyed json object
