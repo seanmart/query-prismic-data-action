@@ -18,8 +18,9 @@ inputs:
   FIELDS:
     description: |
       if blank will return entire object. fields should comma delimited and use dot notation to
-      represent where in the response object the field is (i.e data.intro.title). Keys can be added
-      for the returned object (i.e title:data.intro.title).
+      represent where in the response object the field is (i.e data.intro.title). Keys can aalso be
+      added for the returned object in case they should have a different name (i.e title:data.intro.title).
+      example: id:uid,data.intro.title,data.intro.location would return {id:123,title:hello,location:france}
     required: false
 
 outputs:
