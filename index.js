@@ -5,7 +5,6 @@ import fetch from "node-fetch";
 let has = (s,c)=> s.indexOf(c) >= 0
 
 async function queryPrismicAPI(){
-
   let accessToken = getInput('ACCESS_TOKEN')
   let endPoint = getInput('END_POINT')
   let type = getInput('TYPE')
@@ -15,11 +14,10 @@ async function queryPrismicAPI(){
 
   if(type){
     let res = await client.getAllByType(type)
-    data = res ? buildArrayFromFields(res,fields) : {}
+    data = res ? buildArrayFromFields(res,fields) : []
   }
 
   setOutput('DATA', JSON.stringify(data));
-
 }
 
 function buildArrayFromFields(data,fields){
@@ -39,25 +37,20 @@ function getValueFromPath(path,data){
 
 
 function getFieldsKeyAndPath(fields){
-
   if (!fields) return []
 
   let fieldsArr = has(fields,",") ? fields.split(",") : [fields]
 
   return fieldsArr.map(field => {
-
     if(has(field,":")){
       let parts = field.split(':')
       return {key: parts[0], path: parts[1]}
     }
-
     if (has(field,".")){
       let parts = f.split(".")
       return {key:parts[parts.length - 1],path: field }
     }
-
     return {key: field,path: field}
-
   })
 }
 
