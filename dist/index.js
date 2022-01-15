@@ -9430,7 +9430,7 @@ function getFieldsKeyAndPath(fields){
       return {key: parts[0], path: parts[1]}
     }
     if (has(field,".")){
-      let parts = f.split(".")
+      let parts = field.split(".")
       return {key:parts[parts.length - 1],path: field }
     }
     return {key: field,path: field}
