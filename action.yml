@@ -4,19 +4,22 @@ runs:
   main: dist/index.js
 inputs:
   ACCESS_TOKEN:
-    description: should be a Prismic Access Token
+    description: should be a Prismic Access Token.
     required: true
 
   END_POINT:
-    description: endpoint for Prismic
+    description: endpoint for Prismic.
     required: true
 
   TYPE:
-    description: queries all of a type
+    description: queries all of a type.
     requred: true
 
   FIELDS:
-    description: 'if blank will return object, fields should be as follow: key1:obj.place.1,key2:obj.place.2'
+    description: |
+      if blank will return entire object. fields should comma delimited and use dot notation to
+      represent where in the response object the field is (i.e data.intro.title). Keys can be added
+      for the returned object (i.e title:data.intro.title).
     required: false
 
 outputs:
