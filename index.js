@@ -35,10 +35,6 @@ function parseQuery(query){
   return query
 }
 
-<<<<<<< HEAD
-  console.log(data)
-  setOutput('DATA', JSON.stringify(data));
-=======
 function getDate(options){
   let date = new Date()
   if (options) date.setDate(date.getDate() + parseInt(options))
@@ -50,7 +46,6 @@ function formatDate(date){
   let month = (date.getMonth() + 1).toString().padStart(2, '0')
   let year = date.getFullYear()
   return `${year}-${month}-${day}`
->>>>>>> 0fc14fd67d579a456cd02fe1c0bfc2809846243f
 }
 
 function buildArrayFromFields(data,fields){

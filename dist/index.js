@@ -1732,6 +1732,7 @@ async function queryPrismicAPI(){
   let res = await client.get(query)
   let data = res ? buildArrayFromFields(res,fields) : []
 
+  console.log(data)
   setOutput('DATA', JSON.stringify(data));
 }
 
@@ -1762,16 +1763,11 @@ function getDate(options){
   return formatDate(date)
 }
 
-<<<<<<< HEAD
-  console.log(data)
-  ;(0,core.setOutput)('DATA', JSON.stringify(data));
-=======
 function formatDate(date){
   let day = date.getDate().toString().padStart(2, '0')
   let month = (date.getMonth() + 1).toString().padStart(2, '0')
   let year = date.getFullYear()
   return `${year}-${month}-${day}`
->>>>>>> 0fc14fd67d579a456cd02fe1c0bfc2809846243f
 }
 
 function buildArrayFromFields(data,fields){
