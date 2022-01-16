@@ -17,9 +17,9 @@ inputs:
       conditions should be formatted in double brackets like this: {{fn,value}}
       available conditions:
         {{date,offset}}: returns an offset of the current date
-        
+
     requred: false
-    default: ""
+    default: null
 
   FIELDS:
     description: |

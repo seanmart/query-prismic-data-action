@@ -7,7 +7,6 @@ async function queryPrismicAPI(){
   let query = parseQuery(getInput('QUERY'))
   let fields = getFieldsKeyAndPath(getInput('FIELDS'))
   let client = getPrismicClient(endPoint,accessToken)
-
   let res = await client.get(query)
   let data = res ? buildArrayFromFields(res,fields) : []
 
@@ -15,6 +14,7 @@ async function queryPrismicAPI(){
 }
 
 function parseQuery(query){
+  if (!query) return ""
   let queryVars = query.match(/[^{\}]+(?=})/g)
   if (queryVars){
     queryVars.forEach(v => {
@@ -48,6 +48,7 @@ function formatDate(date){
 }
 
 function buildArrayFromFields(data,fields){
+  if (fields.length == 0) return data
   return data.map(dataItem => {
     if (fields.length == 0) return dataItem
     return fields.reduce((obj,field) => {
