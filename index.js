@@ -9,10 +9,9 @@ async function queryPrismicAPI(){
   let fields = getFieldsKeyAndPath(getInput('FIELDS'))
   let client = getPrismicClient(endPoint,accessToken)
   let res = await client.get(query)
+  console.log(res)
   let data = res ? buildArrayFromFields(res,fields) : []
 
-  console.log('query',query)
-  console.log('data',data)
   setOutput('DATA', JSON.stringify(data));
 }
 

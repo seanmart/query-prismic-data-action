@@ -9392,10 +9392,9 @@ async function queryPrismicAPI(){
   let fields = getFieldsKeyAndPath((0,core.getInput)('FIELDS'))
   let client = getPrismicClient(endPoint,accessToken)
   let res = await client.get(query)
+  console.log(res)
   let data = res ? buildArrayFromFields(res,fields) : []
 
-  console.log('query',query)
-  console.log('data',data)
   ;(0,core.setOutput)('DATA', JSON.stringify(data));
 }
 
