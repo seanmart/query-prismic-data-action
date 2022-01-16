@@ -1,5 +1,6 @@
 import * as prismic from "@prismicio/client"
 import {getInput,setOutput} from "@actions/core"
+import fetch from "node-fetch";
 
 async function queryPrismicAPI(){
   let accessToken = getInput('ACCESS_TOKEN')
