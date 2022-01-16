@@ -15,6 +15,16 @@ async function queryPrismicAPI(){
   setOutput('DATA', JSON.stringify(data));
 }
 
+function getPrismicClient(endPoint,accessToken){
+  return prismic.createClient(endPoint,{
+    accessToken,
+    fetch: async (url,options)=>{
+      const res = await fetch(url,options)
+      if (res.ok) return res
+    }
+  })
+}
+
 function parseQuery(query){
   if (!query) return ""
   let queryVars = query.match(/[^{\}]+(?=})/g)

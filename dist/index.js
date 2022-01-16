@@ -1275,6 +1275,92 @@ exports.checkBypass = checkBypass;
 
 /***/ }),
 
+/***/ 533:
+/***/ ((module) => {
+
+"use strict";
+/*!
+ * escape-html
+ * Copyright(c) 2012-2013 TJ Holowaychuk
+ * Copyright(c) 2015 Andreas Lubbe
+ * Copyright(c) 2015 Tiancheng "Timothy" Gu
+ * MIT Licensed
+ */
+
+
+
+/**
+ * Module variables.
+ * @private
+ */
+
+var matchHtmlRegExp = /["'&<>]/;
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = escapeHtml;
+
+/**
+ * Escape special characters in the given string of html.
+ *
+ * @param  {string} string The string to escape for inserting into HTML
+ * @return {string}
+ * @public
+ */
+
+function escapeHtml(string) {
+  var str = '' + string;
+  var match = matchHtmlRegExp.exec(str);
+
+  if (!match) {
+    return str;
+  }
+
+  var escape;
+  var html = '';
+  var index = 0;
+  var lastIndex = 0;
+
+  for (index = match.index; index < str.length; index++) {
+    switch (str.charCodeAt(index)) {
+      case 34: // "
+        escape = '&quot;';
+        break;
+      case 38: // &
+        escape = '&amp;';
+        break;
+      case 39: // '
+        escape = '&#39;';
+        break;
+      case 60: // <
+        escape = '&lt;';
+        break;
+      case 62: // >
+        escape = '&gt;';
+        break;
+      default:
+        continue;
+    }
+
+    if (lastIndex !== index) {
+      html += str.substring(lastIndex, index);
+    }
+
+    lastIndex = index + 1;
+    html += escape;
+  }
+
+  return lastIndex !== index
+    ? html + str.substring(lastIndex, index)
+    : html;
+}
+
+
+/***/ }),
+
 /***/ 480:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -1668,35 +1754,6 @@ module.exports = require("util");
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__nccwpck_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__nccwpck_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__nccwpck_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -1717,24 +1774,861 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
+// ESM COMPAT FLAG
 __nccwpck_require__.r(__webpack_exports__);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(78);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
+
+;// CONCATENATED MODULE: ./node_modules/@prismicio/types/dist/index.js
+const dist_RichTextNodeType = {
+  heading1: "heading1",
+  heading2: "heading2",
+  heading3: "heading3",
+  heading4: "heading4",
+  heading5: "heading5",
+  heading6: "heading6",
+  paragraph: "paragraph",
+  preformatted: "preformatted",
+  strong: "strong",
+  em: "em",
+  listItem: "list-item",
+  oListItem: "o-list-item",
+  list: "group-list-item",
+  oList: "group-o-list-item",
+  image: "image",
+  embed: "embed",
+  hyperlink: "hyperlink",
+  label: "label",
+  span: "span"
+};
+const dist_LinkType = {
+  Any: "Any",
+  Document: "Document",
+  Media: "Media",
+  Web: "Web"
+};
+const EmbedType = {
+  Link: "link",
+  Rich: "rich"
+};
+
+const CustomTypeModelFieldType = {
+  Boolean: "Boolean",
+  Color: "Color",
+  Date: "Date",
+  Embed: "Embed",
+  GeoPoint: "GeoPoint",
+  Group: "Group",
+  Image: "Image",
+  IntegrationFields: "IntegrationFields",
+  Link: "Link",
+  Number: "Number",
+  Select: "Select",
+  Slices: "Slices",
+  StructuredText: "StructuredText",
+  Text: "Text",
+  Timestamp: "Timestamp",
+  UID: "UID"
+};
+const CustomTypeModelLinkSelectType = {
+  Document: "document",
+  Media: "media"
+};
+const CustomTypeModelSliceDisplay = {
+  List: "list",
+  Grid: "grid"
+};
+const CustomTypeModelSliceType = {
+  Slice: "Slice",
+  SharedSlice: "SharedSlice"
+};
+
+const WebhookType = {
+  APIUpdate: "api-update",
+  TestTrigger: "test-trigger"
+};
+
+
+//# sourceMappingURL=index.js.map
+
+// EXTERNAL MODULE: ./node_modules/escape-html/index.js
+var escape_html = __nccwpck_require__(533);
+;// CONCATENATED MODULE: ./node_modules/@prismicio/helpers/dist/index.js
+
+
+
+
+
+const asDate = (dateOrTimestampField) => {
+  if (!dateOrTimestampField) {
+    return null;
+  }
+  if (dateOrTimestampField.length === 24) {
+    return new Date(dateOrTimestampField.replace(/(\+|-)(\d{2})(\d{2})$/, ".000$1$2:$3"));
+  } else {
+    return new Date(dateOrTimestampField);
+  }
+};
+
+const documentToLinkField = (prismicDocument) => {
+  var _a, _b, _c;
+  return {
+    link_type: dist_LinkType.Document,
+    id: prismicDocument.id,
+    uid: (_a = prismicDocument.uid) != null ? _a : void 0,
+    type: prismicDocument.type,
+    tags: prismicDocument.tags,
+    lang: prismicDocument.lang,
+    url: (_b = prismicDocument.url) != null ? _b : void 0,
+    slug: (_c = prismicDocument.slugs) == null ? void 0 : _c[0],
+    ...Object.keys(prismicDocument.data).length > 0 ? { data: prismicDocument.data } : {}
+  };
+};
+
+const asLink = (linkFieldOrDocument, linkResolver) => {
+  if (!linkFieldOrDocument) {
+    return null;
+  }
+  const linkField = "link_type" in linkFieldOrDocument ? linkFieldOrDocument : documentToLinkField(linkFieldOrDocument);
+  switch (linkField.link_type) {
+    case dist_LinkType.Media:
+    case dist_LinkType.Web:
+      return "url" in linkField ? linkField.url : null;
+    case dist_LinkType.Document: {
+      if ("id" in linkField && linkResolver) {
+        const resolvedURL = linkResolver(linkField);
+        if (resolvedURL != null) {
+          return resolvedURL;
+        }
+      }
+      if ("url" in linkField && linkField.url) {
+        return linkField.url;
+      }
+      return null;
+    }
+    case dist_LinkType.Any:
+    default:
+      return null;
+  }
+};
+
+const asText = (richTextField, separator) => {
+  if (richTextField) {
+    return asText$1(richTextField, separator);
+  } else {
+    return null;
+  }
+};
+
+const getLabel = (node) => {
+  return "data" in node && "label" in node.data ? ` class="${node.data.label}"` : "";
+};
+const serializeStandardTag = (tag, node, children) => {
+  return `<${tag}${getLabel(node)}>${children.join("")}</${tag}>`;
+};
+const serializePreFormatted = (node) => {
+  return `<pre${getLabel(node)}>${escapeHtml(node.text)}</pre>`;
+};
+const serializeImage = (linkResolver, node) => {
+  let imageTag = `<img src="${node.url}" alt="${escapeHtml(node.alt)}"${node.copyright ? ` copyright="${escapeHtml(node.copyright)}"` : ""} />`;
+  if (node.linkTo) {
+    imageTag = serializeHyperlink(linkResolver, {
+      type: RichTextNodeType.hyperlink,
+      data: node.linkTo,
+      start: 0,
+      end: 0
+    }, [imageTag]);
+  }
+  return `<p class="block-img">${imageTag}</p>`;
+};
+const serializeEmbed = (node) => {
+  return `<div data-oembed="${node.oembed.embed_url}" data-oembed-type="${node.oembed.type}" data-oembed-provider="${node.oembed.provider_name}"${getLabel(node)}>${node.oembed.html}</div>`;
+};
+const serializeHyperlink = (linkResolver, node, children) => {
+  switch (node.data.link_type) {
+    case LinkType.Web: {
+      return `<a href="${escapeHtml(node.data.url)}" target="${node.data.target}" rel="noopener noreferrer"${getLabel(node)}>${children.join("")}</a>`;
+    }
+    case LinkType.Document: {
+      return `<a href="${asLink(node.data, linkResolver)}"${getLabel(node)}>${children.join("")}</a>`;
+    }
+    case LinkType.Media: {
+      return `<a href="${node.data.url}"${getLabel(node)}>${children.join("")}</a>`;
+    }
+  }
+};
+const serializeSpan = (content) => {
+  return content ? escapeHtml(content).replace(/\n/g, "<br />") : "";
+};
+
+const createDefaultHTMLSerializer = (linkResolver) => {
+  return (_type, node, text, children, _key) => {
+    switch (node.type) {
+      case Element.heading1:
+        return serializeStandardTag("h1", node, children);
+      case Element.heading2:
+        return serializeStandardTag("h2", node, children);
+      case Element.heading3:
+        return serializeStandardTag("h3", node, children);
+      case Element.heading4:
+        return serializeStandardTag("h4", node, children);
+      case Element.heading5:
+        return serializeStandardTag("h5", node, children);
+      case Element.heading6:
+        return serializeStandardTag("h6", node, children);
+      case Element.paragraph:
+        return serializeStandardTag("p", node, children);
+      case Element.preformatted:
+        return serializePreFormatted(node);
+      case Element.strong:
+        return serializeStandardTag("strong", node, children);
+      case Element.em:
+        return serializeStandardTag("em", node, children);
+      case Element.listItem:
+        return serializeStandardTag("li", node, children);
+      case Element.oListItem:
+        return serializeStandardTag("li", node, children);
+      case Element.list:
+        return serializeStandardTag("ul", node, children);
+      case Element.oList:
+        return serializeStandardTag("ol", node, children);
+      case Element.image:
+        return serializeImage(linkResolver, node);
+      case Element.embed:
+        return serializeEmbed(node);
+      case Element.hyperlink:
+        return serializeHyperlink(linkResolver, node, children);
+      case Element.label:
+        return serializeStandardTag("span", node, children);
+      case Element.span:
+      default:
+        return serializeSpan(text);
+    }
+  };
+};
+const wrapMapSerializerWithStringChildren = (mapSerializer) => {
+  const modifiedMapSerializer = {};
+  for (const tag in mapSerializer) {
+    const tagSerializer = mapSerializer[tag];
+    if (tagSerializer) {
+      modifiedMapSerializer[tag] = (payload) => {
+        return tagSerializer({
+          ...payload,
+          children: payload.children.join("")
+        });
+      };
+    }
+  }
+  return wrapMapSerializer(modifiedMapSerializer);
+};
+const asHTML = (richTextField, linkResolver, htmlSerializer) => {
+  if (richTextField) {
+    let serializer;
+    if (htmlSerializer) {
+      serializer = composeSerializers(typeof htmlSerializer === "object" ? wrapMapSerializerWithStringChildren(htmlSerializer) : (type, node, text, children, key) => htmlSerializer(type, node, text, children.join(""), key), createDefaultHTMLSerializer(linkResolver));
+    } else {
+      serializer = createDefaultHTMLSerializer(linkResolver);
+    }
+    return serialize(richTextField, serializer).join("");
+  } else {
+    return null;
+  }
+};
+
+const isNonNullish = (input) => {
+  return input != null;
+};
+const isNonEmptyArray = (input) => {
+  return !!input.length;
+};
+const richText = (field) => {
+  if (field.length === 1 && "text" in field[0]) {
+    return !!field[0].text;
+  } else {
+    return !!field.length;
+  }
+};
+const title = richText;
+const imageThumbnail = (thumbnail) => {
+  return !!thumbnail.url;
+};
+const dist_image = (field) => {
+  return imageThumbnail(field);
+};
+const dist_link = (field) => {
+  return "id" in field || "url" in field;
+};
+const linkToMedia = dist_link;
+const contentRelationship = dist_link;
+const date = isNonNullish;
+const timestamp = isNonNullish;
+const color = isNonNullish;
+const number = isNonNullish;
+const keyText = isNonNullish;
+const dist_select = isNonNullish;
+const dist_embed = (field) => {
+  return !!field.embed_url;
+};
+const geoPoint = (field) => {
+  return "longitude" in field;
+};
+const integrationFields = isNonNullish;
+const group = isNonEmptyArray;
+const sliceZone = isNonEmptyArray;
+
+var isFilled = /*#__PURE__*/Object.freeze({
+	__proto__: null,
+	richText: richText,
+	title: title,
+	imageThumbnail: imageThumbnail,
+	image: dist_image,
+	link: dist_link,
+	linkToMedia: linkToMedia,
+	contentRelationship: contentRelationship,
+	date: date,
+	timestamp: timestamp,
+	color: color,
+	number: number,
+	keyText: keyText,
+	select: dist_select,
+	embed: dist_embed,
+	geoPoint: geoPoint,
+	integrationFields: integrationFields,
+	group: group,
+	sliceZone: sliceZone
+});
+
+const Elements = (/* unused pure expression or super */ null && (Element));
+
+
+//# sourceMappingURL=index.js.map
+
+;// CONCATENATED MODULE: ./node_modules/@prismicio/client/dist/index.js
+
+
+const getEndpoint = (repositoryName) => `https://${repositoryName}.cdn.prismic.io/api/v2`;
+
+const castArray = (a) => Array.isArray(a) ? a : [a];
+
+const RENAMED_PARAMS = {
+  accessToken: "access_token"
+};
+const castOrderingToString = (ordering) => typeof ordering === "string" ? ordering : [
+  ordering.field,
+  ordering.direction === "desc" ? ordering.direction : void 0
+].filter(Boolean).join(" ");
+const buildQueryURL = (endpoint, args) => {
+  var _a;
+  const { predicates, ...params } = args;
+  const url = new URL(`documents/search`, `${endpoint}/`);
+  if (predicates) {
+    for (const predicate of castArray(predicates)) {
+      url.searchParams.append("q", `[${predicate}]`);
+    }
+  }
+  for (const k in params) {
+    const name = (_a = RENAMED_PARAMS[k]) != null ? _a : k;
+    let value = params[k];
+    if (name === "orderings") {
+      const scopedValue = params[name];
+      if (scopedValue != null) {
+        const v = castArray(scopedValue).map((ordering) => castOrderingToString(ordering)).join(",");
+        value = `[${v}]`;
+      }
+    } else if (name === "routes") {
+      if (typeof params[name] === "object") {
+        value = JSON.stringify(castArray(params[name]));
+      }
+    }
+    if (value != null) {
+      url.searchParams.set(name, castArray(value).join(","));
+    }
+  }
+  return url.toString();
+};
+
+const appendPredicates = (objWithPredicates = {}, predicates) => {
+  return {
+    ...objWithPredicates,
+    predicates: [
+      ...objWithPredicates.predicates || [],
+      ...castArray(predicates)
+    ]
+  };
+};
+
+const castThunk = (a) => typeof a === "function" ? a : () => a;
+
+class PrismicError extends Error {
+  constructor(message = "An invalid API response was returned", url, response) {
+    super(message);
+    this.url = url;
+    this.response = response;
+  }
+}
+
+const findRef = (refs, predicate) => {
+  const ref = refs.find((ref2) => predicate(ref2));
+  if (!ref) {
+    throw new PrismicError("Ref could not be found.", void 0, void 0);
+  }
+  return ref;
+};
+
+const findMasterRef = (refs) => {
+  return findRef(refs, (ref) => ref.isMasterRef);
+};
+
+const findRefByID = (refs, id) => {
+  return findRef(refs, (ref) => ref.id === id);
+};
+
+const findRefByLabel = (refs, label) => {
+  return findRef(refs, (ref) => ref.label === label);
+};
+
+const readValue = (value) => {
+  return value.replace(/%3B/g, ";");
+};
+const parse = (cookieString) => {
+  const result = {};
+  const cookies = cookieString.split("; ");
+  for (const cookie of cookies) {
+    const parts = cookie.split("=");
+    const value = parts.slice(1).join("=");
+    const name = readValue(parts[0]).replace(/%3D/g, "=");
+    result[name] = readValue(value);
+  }
+  return result;
+};
+const getAll = (cookieStore) => parse(cookieStore);
+const getCookie = (name, cookieStore) => getAll(cookieStore)[name];
+
+class ForbiddenError extends PrismicError {
+}
+
+class ParsingError extends PrismicError {
+}
+
+const formatValue = (value) => {
+  if (Array.isArray(value)) {
+    return `[${value.map(formatValue).join(", ")}]`;
+  }
+  if (typeof value === "string") {
+    return `"${value}"`;
+  }
+  if (value instanceof Date) {
+    return `${value.getTime()}`;
+  }
+  return `${value}`;
+};
+const pathWithArgsPredicate = (name) => {
+  const fn = (path, ...args) => {
+    const formattedArgs = args.map(formatValue).join(", ");
+    const joiner = path && args.length ? ", " : "";
+    return `[${name}(${path}${joiner}${formattedArgs})]`;
+  };
+  return fn;
+};
+const pathPredicate = (name) => {
+  const predicateFn = pathWithArgsPredicate(name);
+  const fn = (path) => {
+    return predicateFn(path);
+  };
+  return fn;
+};
+const argsPredicate = (name) => {
+  const predicateFn = pathWithArgsPredicate(name);
+  const fn = (...args) => {
+    return predicateFn("", ...args);
+  };
+  return fn;
+};
+const predicate = {
+  at: pathWithArgsPredicate("at"),
+  not: pathWithArgsPredicate("not"),
+  any: pathWithArgsPredicate("any"),
+  in: pathWithArgsPredicate("in"),
+  fulltext: pathWithArgsPredicate("fulltext"),
+  has: pathPredicate("has"),
+  missing: pathPredicate("missing"),
+  similar: argsPredicate("similar"),
+  geopointNear: pathWithArgsPredicate("geopoint.near"),
+  numberLessThan: pathWithArgsPredicate("number.lt"),
+  numberGreaterThan: pathWithArgsPredicate("number.gt"),
+  numberInRange: pathWithArgsPredicate("number.inRange"),
+  dateAfter: pathWithArgsPredicate("date.after"),
+  dateBefore: pathWithArgsPredicate("date.before"),
+  dateBetween: pathWithArgsPredicate("date.between"),
+  dateDayOfMonth: pathWithArgsPredicate("date.day-of-month"),
+  dateDayOfMonthAfter: pathWithArgsPredicate("date.day-of-month-after"),
+  dateDayOfMonthBefore: pathWithArgsPredicate("date.day-of-month-before"),
+  dateDayOfWeek: pathWithArgsPredicate("date.day-of-week"),
+  dateDayOfWeekAfter: pathWithArgsPredicate("date.day-of-week-after"),
+  dateDayOfWeekBefore: pathWithArgsPredicate("date.day-of-week-before"),
+  dateMonth: pathWithArgsPredicate("date.month"),
+  dateMonthAfter: pathWithArgsPredicate("date.month-after"),
+  dateMonthBefore: pathWithArgsPredicate("date.month-before"),
+  dateYear: pathWithArgsPredicate("date.year"),
+  dateHour: pathWithArgsPredicate("date.hour"),
+  dateHourAfter: pathWithArgsPredicate("date.hour-after"),
+  dateHourBefore: pathWithArgsPredicate("date.hour-before")
+};
+
+const preview = "io.prismic.preview";
+
+var cookie = /*#__PURE__*/Object.freeze({
+	__proto__: null,
+	preview: preview
+});
+
+class NotFoundError extends PrismicError {
+}
+
+const MAX_PAGE_SIZE = 100;
+const REPOSITORY_CACHE_TTL = 5e3;
+const GET_ALL_QUERY_DELAY = 500;
+var RefStateMode;
+(function(RefStateMode2) {
+  RefStateMode2["Master"] = "Master";
+  RefStateMode2["ReleaseID"] = "ReleaseID";
+  RefStateMode2["ReleaseLabel"] = "ReleaseLabel";
+  RefStateMode2["Manual"] = "Manual";
+})(RefStateMode || (RefStateMode = {}));
+const typePredicate = (documentType) => predicate.at("document.type", documentType);
+const everyTagPredicate = (tags) => predicate.at("document.tags", tags);
+const someTagsPredicate = (tags) => predicate.any("document.tags", tags);
+const createClient = (...args) => new Client(...args);
+class Client {
+  constructor(endpoint, options = {}) {
+    this.refState = {
+      mode: RefStateMode.Master,
+      autoPreviewsEnabled: true
+    };
+    this.cachedRepositoryExpiration = 0;
+    if (process.env.NODE_ENV === "development" && /\.prismic\.io\/(?!api\/v2\/?)/.test(endpoint)) {
+      throw new PrismicError("@prismicio/client only supports Prismic Rest API V2. Please use the getEndpoint helper to generate a valid Rest API V2 endpoint URL.", void 0, void 0);
+    }
+    this.endpoint = endpoint;
+    this.accessToken = options.accessToken;
+    this.routes = options.routes;
+    this.defaultParams = options.defaultParams;
+    if (options.ref) {
+      this.queryContentFromRef(options.ref);
+    }
+    if (typeof options.fetch === "function") {
+      this.fetchFn = options.fetch;
+    } else if (typeof globalThis.fetch === "function") {
+      this.fetchFn = globalThis.fetch;
+    } else {
+      throw new PrismicError("A valid fetch implementation was not provided. In environments where fetch is not available (including Node.js), a fetch implementation must be provided via a polyfill or the `fetch` option.", void 0, void 0);
+    }
+    if (this.fetchFn === globalThis.fetch) {
+      this.fetchFn = this.fetchFn.bind(globalThis);
+    }
+  }
+  enableAutoPreviews() {
+    this.refState.autoPreviewsEnabled = true;
+  }
+  enableAutoPreviewsFromReq(req) {
+    this.refState.httpRequest = req;
+    this.refState.autoPreviewsEnabled = true;
+  }
+  disableAutoPreviews() {
+    this.refState.autoPreviewsEnabled = false;
+  }
+  async query(predicates, params) {
+    const url = await this.buildQueryURL({ ...params, predicates });
+    return await this.fetch(url, params);
+  }
+  async get(params) {
+    const url = await this.buildQueryURL(params);
+    return await this.fetch(url, params);
+  }
+  async getFirst(params) {
+    const url = await this.buildQueryURL(params);
+    const result = await this.fetch(url, params);
+    const firstResult = result.results[0];
+    if (firstResult) {
+      return firstResult;
+    }
+    throw new PrismicError("No documents were returned", url, void 0);
+  }
+  async dangerouslyGetAll(params = {}) {
+    const { limit = Infinity, ...actualParams } = params;
+    const resolvedParams = {
+      ...actualParams,
+      pageSize: actualParams.pageSize || MAX_PAGE_SIZE
+    };
+    const documents = [];
+    let latestResult;
+    while ((!latestResult || latestResult.next_page) && documents.length < limit) {
+      const page = latestResult ? latestResult.page + 1 : void 0;
+      latestResult = await this.get({ ...resolvedParams, page });
+      documents.push(...latestResult.results);
+      if (latestResult.next_page) {
+        await new Promise((res) => setTimeout(res, GET_ALL_QUERY_DELAY));
+      }
+    }
+    return documents.slice(0, limit);
+  }
+  async getByID(id, params) {
+    return await this.getFirst(appendPredicates(params, predicate.at("document.id", id)));
+  }
+  async getByIDs(ids, params) {
+    return await this.get(appendPredicates(params, predicate.in("document.id", ids)));
+  }
+  async getAllByIDs(ids, params) {
+    return await this.dangerouslyGetAll(appendPredicates(params, predicate.in("document.id", ids)));
+  }
+  async getByUID(documentType, uid, params) {
+    return await this.getFirst(appendPredicates(params, [
+      typePredicate(documentType),
+      predicate.at(`my.${documentType}.uid`, uid)
+    ]));
+  }
+  async getByUIDs(documentType, uids, params) {
+    return await this.get(appendPredicates(params, [
+      typePredicate(documentType),
+      predicate.in(`my.${documentType}.uid`, uids)
+    ]));
+  }
+  async getAllByUIDs(documentType, uids, params) {
+    return await this.dangerouslyGetAll(appendPredicates(params, [
+      typePredicate(documentType),
+      predicate.in(`my.${documentType}.uid`, uids)
+    ]));
+  }
+  async getSingle(documentType, params) {
+    return await this.getFirst(appendPredicates(params, typePredicate(documentType)));
+  }
+  async getByType(documentType, params) {
+    return await this.get(appendPredicates(params, typePredicate(documentType)));
+  }
+  async getAllByType(documentType, params) {
+    return await this.dangerouslyGetAll(appendPredicates(params, typePredicate(documentType)));
+  }
+  async getByTag(tag, params) {
+    return await this.get(appendPredicates(params, everyTagPredicate(tag)));
+  }
+  async getAllByTag(tag, params) {
+    return await this.dangerouslyGetAll(appendPredicates(params, everyTagPredicate(tag)));
+  }
+  async getByEveryTag(tags, params) {
+    return await this.get(appendPredicates(params, everyTagPredicate(tags)));
+  }
+  async getAllByEveryTag(tags, params) {
+    return await this.dangerouslyGetAll(appendPredicates(params, everyTagPredicate(tags)));
+  }
+  async getBySomeTags(tags, params) {
+    return await this.get(appendPredicates(params, someTagsPredicate(tags)));
+  }
+  async getAllBySomeTags(tags, params) {
+    return await this.dangerouslyGetAll(appendPredicates(params, someTagsPredicate(tags)));
+  }
+  async getRepository() {
+    const url = new URL(this.endpoint);
+    if (this.accessToken) {
+      url.searchParams.set("access_token", this.accessToken);
+    }
+    return await this.fetch(url.toString());
+  }
+  async getRefs() {
+    const repository = await this.getRepository();
+    return repository.refs;
+  }
+  async getRefByID(id) {
+    const refs = await this.getRefs();
+    return findRefByID(refs, id);
+  }
+  async getRefByLabel(label) {
+    const refs = await this.getRefs();
+    return findRefByLabel(refs, label);
+  }
+  async getMasterRef() {
+    const refs = await this.getRefs();
+    return findMasterRef(refs);
+  }
+  async getReleases() {
+    const refs = await this.getRefs();
+    return refs.filter((ref) => !ref.isMasterRef);
+  }
+  async getReleaseByID(id) {
+    const releases = await this.getReleases();
+    return findRefByID(releases, id);
+  }
+  async getReleaseByLabel(label) {
+    const releases = await this.getReleases();
+    return findRefByLabel(releases, label);
+  }
+  async getTags() {
+    try {
+      const tagsForm = await this.getCachedRepositoryForm("tags");
+      return await this.fetch(tagsForm.action);
+    } catch (e) {
+      const repository = await this.getRepository();
+      return repository.tags;
+    }
+  }
+  async buildQueryURL(params = {}) {
+    const ref = params.ref || await this.getResolvedRefString();
+    const integrationFieldsRef = params.integrationFieldsRef || (await this.getCachedRepository()).integrationFieldsRef || void 0;
+    return buildQueryURL(this.endpoint, {
+      ...this.defaultParams,
+      ...params,
+      ref,
+      integrationFieldsRef,
+      routes: params.routes || this.routes,
+      accessToken: params.accessToken || this.accessToken
+    });
+  }
+  async resolvePreviewURL(args) {
+    var _a;
+    let documentID = args.documentID;
+    let previewToken = args.previewToken;
+    if (typeof globalThis.location !== "undefined") {
+      const searchParams = new URLSearchParams(globalThis.location.search);
+      documentID = documentID || searchParams.get("documentId") || void 0;
+      previewToken = previewToken || searchParams.get("token") || void 0;
+    } else if ((_a = this.refState.httpRequest) == null ? void 0 : _a.query) {
+      documentID = documentID || this.refState.httpRequest.query.documentId;
+      previewToken = previewToken || this.refState.httpRequest.query.token;
+    }
+    if (documentID != null) {
+      const document = await this.getByID(documentID, {
+        ref: previewToken
+      });
+      return asLink(document, args.linkResolver);
+    } else {
+      return args.defaultURL;
+    }
+  }
+  queryLatestContent() {
+    this.refState.mode = RefStateMode.Master;
+  }
+  queryContentFromReleaseByID(releaseID) {
+    this.refState = {
+      ...this.refState,
+      mode: RefStateMode.ReleaseID,
+      releaseID
+    };
+  }
+  queryContentFromReleaseByLabel(releaseLabel) {
+    this.refState = {
+      ...this.refState,
+      mode: RefStateMode.ReleaseLabel,
+      releaseLabel
+    };
+  }
+  queryContentFromRef(ref) {
+    this.refState = {
+      ...this.refState,
+      mode: RefStateMode.Manual,
+      ref
+    };
+  }
+  async getCachedRepository() {
+    if (!this.cachedRepository || Date.now() >= this.cachedRepositoryExpiration) {
+      this.cachedRepositoryExpiration = Date.now() + REPOSITORY_CACHE_TTL;
+      this.cachedRepository = await this.getRepository();
+    }
+    return this.cachedRepository;
+  }
+  async getCachedRepositoryForm(name) {
+    const cachedRepository = await this.getCachedRepository();
+    const form = cachedRepository.forms[name];
+    if (!form) {
+      throw new PrismicError(`Form with name "${name}" could not be found`, void 0, void 0);
+    }
+    return form;
+  }
+  async getResolvedRefString() {
+    var _a, _b, _c;
+    if (this.refState.autoPreviewsEnabled) {
+      let previewRef = void 0;
+      if ((_a = globalThis.document) == null ? void 0 : _a.cookie) {
+        previewRef = getCookie(preview, globalThis.document.cookie);
+      } else if ((_c = (_b = this.refState.httpRequest) == null ? void 0 : _b.headers) == null ? void 0 : _c.cookie) {
+        previewRef = getCookie(preview, this.refState.httpRequest.headers.cookie);
+      }
+      if (previewRef) {
+        return previewRef;
+      }
+    }
+    const cachedRepository = await this.getCachedRepository();
+    const refModeType = this.refState.mode;
+    if (refModeType === RefStateMode.ReleaseID) {
+      return findRefByID(cachedRepository.refs, this.refState.releaseID).ref;
+    } else if (refModeType === RefStateMode.ReleaseLabel) {
+      return findRefByLabel(cachedRepository.refs, this.refState.releaseLabel).ref;
+    } else if (refModeType === RefStateMode.Manual) {
+      const res = await castThunk(this.refState.ref)();
+      if (typeof res === "string") {
+        return res;
+      }
+    }
+    return findMasterRef(cachedRepository.refs).ref;
+  }
+  async fetch(url, _params) {
+    const res = await this.fetchFn(url);
+    let json;
+    try {
+      json = await res.json();
+    } catch (e) {
+      if (res.status === 404) {
+        throw new NotFoundError(`Prismic repository not found. Check that "${this.endpoint}" is pointing to the correct repository.`, url, void 0);
+      } else {
+        throw new PrismicError(void 0, url, void 0);
+      }
+    }
+    switch (res.status) {
+      case 200: {
+        return json;
+      }
+      case 400: {
+        throw new ParsingError(json.message, url, json);
+      }
+      case 401:
+      case 403: {
+        throw new ForbiddenError("error" in json ? json.error : json.message, url, json);
+      }
+    }
+    throw new PrismicError(void 0, url, json);
+  }
+}
+
+const predicates = (/* unused pure expression or super */ null && (predicate));
+const Predicates = (/* unused pure expression or super */ null && (predicate));
+
+
+//# sourceMappingURL=index.js.map
+
+// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
+var core = __nccwpck_require__(78);
+;// CONCATENATED MODULE: ./index.js
 
 
 
 async function queryPrismicAPI(){
-  let accessToken = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('ACCESS_TOKEN')
-  let endPoint = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('END_POINT')
-  let query = parseQuery((0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('QUERY'))
-  let fields = getFieldsKeyAndPath((0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('FIELDS'))
+  let accessToken = (0,core.getInput)('ACCESS_TOKEN')
+  let endPoint = (0,core.getInput)('END_POINT')
+  let query = parseQuery((0,core.getInput)('QUERY'))
+  let fields = getFieldsKeyAndPath((0,core.getInput)('FIELDS'))
   let client = getPrismicClient(endPoint,accessToken)
   let res = await client.get(query)
   let data = res ? buildArrayFromFields(res,fields) : []
 
   console.log('query',query)
   console.log('data',data)
-  ;(0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput)('DATA', JSON.stringify(data));
+  ;(0,core.setOutput)('DATA', JSON.stringify(data));
+}
+
+function getPrismicClient(endPoint,accessToken){
+  return createClient(endPoint,{
+    accessToken,
+    fetch: async (url,options)=>{
+      const res = await fetch(url,options)
+      if (res.ok) return res
+    }
+  })
 }
 
 function parseQuery(query){
