@@ -1724,17 +1724,17 @@ __nccwpck_require__.r(__webpack_exports__);
 
 
 async function queryPrismicAPI(){
-  let accessToken = getInput('ACCESS_TOKEN')
-  let endPoint = getInput('END_POINT')
-  let query = parseQuery(getInput('QUERY'))
-  let fields = getFieldsKeyAndPath(getInput('FIELDS'))
+  let accessToken = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('ACCESS_TOKEN')
+  let endPoint = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('END_POINT')
+  let query = parseQuery((0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('QUERY'))
+  let fields = getFieldsKeyAndPath((0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('FIELDS'))
   let client = getPrismicClient(endPoint,accessToken)
   let res = await client.get(query)
   let data = res ? buildArrayFromFields(res,fields) : []
 
   console.log('query',query)
   console.log('data',data)
-  setOutput('DATA', JSON.stringify(data));
+  ;(0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput)('DATA', JSON.stringify(data));
 }
 
 function parseQuery(query){
@@ -1804,9 +1804,7 @@ function getFieldsKeyAndPath(fields){
   })
 }
 
-
-//example
-//[[at(document.type, "event")][date.after(my.event.end_date,{{date,-1}})]]
+queryPrismicAPI()
 
 })();
 

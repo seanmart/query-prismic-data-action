@@ -82,6 +82,4 @@ function getFieldsKeyAndPath(fields){
   })
 }
 
-
-//example
-//[[at(document.type, "event")][date.after(my.event.end_date,{{date,-1}})]]
+queryPrismicAPI()
