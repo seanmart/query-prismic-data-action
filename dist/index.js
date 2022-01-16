@@ -1804,6 +1804,10 @@ function getFieldsKeyAndPath(fields){
   })
 }
 
+function has(s,c){
+  return s.indexOf(c) >= 0
+}
+
 queryPrismicAPI()
 
 })();
