@@ -8,7 +8,7 @@ async function queryPrismicAPI(){
   let fields = getFieldsKeyAndPath(getInput('FIELDS'))
   let client = await prismicClient(endPoint,accessToken)
   let res = await client.get(query)
-  let data = res ? buildArrayFromFields(res.results,fields) : []
+  let data = res && res.results ? buildArrayFromFields(res.results,fields) : []
 
   setOutput('DATA', JSON.stringify(data));
 }
@@ -44,7 +44,7 @@ function formatDate(date){
   let day = date.getDate().toString().padStart(2, '0')
   let month = (date.getMonth() + 1).toString().padStart(2, '0')
   let year = date.getFullYear()
-  return `${year}-${month}-${day}`
+  return `"${year}-${month}-${day}"`
 }
 
 function buildArrayFromFields(data,fields){
