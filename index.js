@@ -1,29 +1,16 @@
-import * as prismic from "@prismicio/client"
+import prismicClient from './lib/prismicClient'
 import {getInput,setOutput} from "@actions/core"
-import fetch from "node-fetch";
 
 async function queryPrismicAPI(){
   let accessToken = getInput('ACCESS_TOKEN')
   let endPoint = getInput('END_POINT')
   let query = parseQuery(getInput('QUERY'))
   let fields = getFieldsKeyAndPath(getInput('FIELDS'))
-  let client = getPrismicClient(endPoint,accessToken)
+  let client = await prismicClient(endpoint,accessToken)
   let res = await client.get(query)
-  console.log(query)
-  console.log(res)
   let data = res ? buildArrayFromFields(res,fields) : []
 
   setOutput('DATA', JSON.stringify(data));
-}
-
-function getPrismicClient(endPoint,accessToken){
-  return prismic.createClient(endPoint,{
-    accessToken,
-    fetch: async (url,options)=>{
-      const res = await fetch(url,options)
-      if (res.ok) return res
-    }
-  })
 }
 
 function parseQuery(query){
