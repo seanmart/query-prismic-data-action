@@ -6,7 +6,7 @@ async function queryPrismicAPI(){
   let endPoint = getInput('END_POINT')
   let query = parseQuery(getInput('QUERY'))
   let fields = getFieldsKeyAndPath(getInput('FIELDS'))
-  let client = await prismicClient(endpoint,accessToken)
+  let client = await prismicClient(endPoint,accessToken)
   let res = await client.get(query)
   let data = res ? buildArrayFromFields(res.results,fields) : []
 
