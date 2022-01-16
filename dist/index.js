@@ -9400,7 +9400,8 @@ async function queryPrismicAPI(){
     data = res ? buildArrayFromFields(res,fields) : []
   }
 
-  (0,core.setOutput)('DATA', JSON.stringify(data));
+  console.log(data)
+  ;(0,core.setOutput)('DATA', JSON.stringify(data));
 }
 
 function buildArrayFromFields(data,fields){

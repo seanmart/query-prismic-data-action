@@ -17,6 +17,7 @@ async function queryPrismicAPI(){
     data = res ? buildArrayFromFields(res,fields) : []
   }
 
+  console.log(data)
   setOutput('DATA', JSON.stringify(data));
 }
 
