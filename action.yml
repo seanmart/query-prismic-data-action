@@ -11,9 +11,15 @@ inputs:
     description: endpoint for Prismic.
     required: true
 
-  TYPE:
-    description: queries all of a type.
-    requred: true
+  QUERY:
+    description: |
+      add the query here. should be fully formatted, but caan contain double brackets for certain conditions.
+      conditions should be formatted in double brackets like this: {{fn,value}}
+      available conditions:
+        {{date,offset}}: returns an offset of the current date
+        
+    requred: false
+    default: ""
 
   FIELDS:
     description: |

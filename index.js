@@ -1,30 +1,55 @@
 import * as prismic from "@prismicio/client"
 import {getInput,setOutput} from "@actions/core"
-import fetch from "node-fetch";
-
-let has = (s,c)=> s.indexOf(c) >= 0
 
 async function queryPrismicAPI(){
   let accessToken = getInput('ACCESS_TOKEN')
   let endPoint = getInput('END_POINT')
-  let type = getInput('TYPE')
-  let client = getPrismicClient(endPoint,accessToken)
+  let query = parseQuery(getInput('QUERY'))
   let fields = getFieldsKeyAndPath(getInput('FIELDS'))
-  let data = null
+  let client = getPrismicClient(endPoint,accessToken)
 
-  if(type){
-    let res = await client.getAllByType(type)
-    data = res ? buildArrayFromFields(res,fields) : []
-  }
+  let res = await client.get(query)
+  let data = res ? buildArrayFromFields(res,fields) : []
 
   setOutput('DATA', JSON.stringify(data));
 }
 
+function parseQuery(query){
+  let queryVars = query.match(/[^{\}]+(?=})/g)
+  if (queryVars){
+    queryVars.forEach(v => {
+      let replaceStr = `{{${v}}}`
+      let replaceVal = ""
+      let props = v.split(',')
+      let fn = props[0]
+      let options = props.length == 2 ? props[1] : null
+      switch(fn){
+        case 'date':
+        replaceVal = getDate(options)
+        break
+      }
+      query = query.replace(replaceStr,replaceVal)
+    })
+  }
+  return query
+}
+
+function getDate(options){
+  let date = new Date()
+  if (options) date.setDate(date.getDate() + parseInt(options))
+  return formatDate(date)
+}
+
+function formatDate(date){
+  let day = date.getDate().toString().padStart(2, '0')
+  let month = (date.getMonth() + 1).toString().padStart(2, '0')
+  let year = date.getFullYear()
+  return `${year}-${month}-${day}`
+}
+
 function buildArrayFromFields(data,fields){
   return data.map(dataItem => {
-
     if (fields.length == 0) return dataItem
-
     return fields.reduce((obj,field) => {
       let value = getValueFromPath(field.path,dataItem)
       if (value) obj[field.key] = value
@@ -38,12 +63,9 @@ function getValueFromPath(path,data){
   return path.split('.').reduce((obj,key) => obj ? obj[key] : null,data)
 }
 
-
 function getFieldsKeyAndPath(fields){
   if (!fields) return []
-
   let fieldsArr = has(fields,",") ? fields.split(",") : [fields]
-
   return fieldsArr.map(field => {
     if(has(field,":")){
       let parts = field.split(':')
@@ -57,14 +79,6 @@ function getFieldsKeyAndPath(fields){
   })
 }
 
-function getPrismicClient(endPoint,accessToken){
-  return prismic.createClient(endPoint,{
-    accessToken,
-    fetch: async (url,options)=>{
-      const res = await fetch(url,options)
-      if (res.ok) return res
-    }
-  })
-}
 
-queryPrismicAPI()
+//example
+//[[at(document.type, "event")][date.after(my.event.end_date,{{date,-1}})]]
