@@ -10,7 +10,8 @@ async function queryPrismicAPI(){
   let res = await client.get(query)
   let data = res ? buildArrayFromFields(res,fields) : []
 
-  console.log(data)
+  console.log('query',query)
+  console.log('data',data)
   setOutput('DATA', JSON.stringify(data));
 }
 
